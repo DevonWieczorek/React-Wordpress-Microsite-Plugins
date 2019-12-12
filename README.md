@@ -5,7 +5,7 @@ The setup and theming of this project is bootstrapped by [React-WP CLI](https://
 
 `React-WP CLI` is also used for plugin installation and management.
 
-#### `Install` a plugin
+#### `Install`
 To install a plugin from a remote repository, run `react-wp --plugin --install [plugin] <repository> <path>`. In this case `repository` is the remote repository to install from (if you are pulling from a repo other than this one), and `path` is the path to the plugin within the repository (if it is not at the root).
 `repository` and `path` are optional.
 
