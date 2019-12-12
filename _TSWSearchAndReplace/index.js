@@ -9,7 +9,8 @@ export class _TSWSearchAndReplace extends Component {
 
         // Clear any references to TSW
         content = content.replace(/the smart wallet/gi, process.env.REACT_APP_DEFAULT_SITENAME);
-        content = content.replace(/thesmartwallet/gi, process.env.REACT_APP_DEFAULT_SITENAME.replace(/ /g, ''));
+        // (?<!src=".*) - make sure to not replace image sources
+        content = content.replace(/(?<!src=".*)thesmartwallet/gi, process.env.REACT_APP_DEFAULT_SITENAME.replace(/ /g, ''));
 
         // Replace contact-us with mailto: link
         let tswContactRegex = /(http:\/\/|https:\/\/)(thesmartwallet\.com\/contact-us)/gi;
