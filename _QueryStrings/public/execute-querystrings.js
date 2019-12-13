@@ -14,7 +14,7 @@ const GP = (loc, param, returnKeyValuePair) => {
 
 let s1 = GP(url, "utm_campaign") || GP(url, "subaff1");
 let s2 = GP(url, "utm_source") || GP(url, "subaff2") || localStorage.getItem("subaff2") || "null";
-let s3 = GP(url, "articleid") || window['postID'] || GP(url, "subaff3");
+let s3 = window['postID'] || "";
 let s4 = GP(url, "gclid") || GP(url, "subaff4");
 let s5 = "";
 let ranSiteID = GP(url, "ranSiteID");
