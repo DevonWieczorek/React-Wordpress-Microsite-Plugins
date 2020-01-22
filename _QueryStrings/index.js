@@ -14,6 +14,7 @@ export class _QueryStrings extends Component {
 
     componentDidMount(){
         // Enqueue the script using it's public location
+        HookStore.doAction('enqueue_scripts', 'naiveURL', `${process.env.PUBLIC_URL}/scripts/naive-url.js`, '1.0', false);
         HookStore.doAction('enqueue_scripts', 'executeQueryStrings', `${process.env.PUBLIC_URL}/scripts/execute-querystrings.js`, '1.1', true);
 
         // Wait for everything to load before calling our function

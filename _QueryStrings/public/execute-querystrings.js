@@ -1,136 +1,119 @@
 let ckcount = 0;
-let lmcount = 0;
 let tunecount = 0;
-const url = window.location.href;
+const _URL = new window.NaiveURL(window.location.href);
 
-const GP = (loc, param, returnKeyValuePair) => {
-	if (param.length === 0) return '';
-	let regex = '[?&]' + param.toLowerCase() + '=([^&#]*)';
-	let results = (new RegExp(regex)).exec(loc.toLowerCase());
-	if (results && !returnKeyValuePair) return results[1].trim();
-	if (results && returnKeyValuePair) return ("&" + param + "=" + results[1]).trim();
-	return '';
-}
-
-let s1 = GP(url, "utm_campaign") || GP(url, "subaff1");
-let s2 = GP(url, "utm_source") || GP(url, "subaff2") || localStorage.getItem("subaff2") || "null";
-let s3 = window['postID'] || "";
-let s4 = GP(url, "gclid") || GP(url, "subaff4");
+let s1 = _URL.GetSearchParameter('utm_campaign') || _URL.GetSearchParameter('subaff1');
+let s2 = _URL.GetSearchParameter('utm_source') || _URL.GetSearchParameter('subaff2') || localStorage.getItem("subaff2") || "null";
+let s3 = _URL.GetSearchParameter('articleid') || _URL.GetSearchParameter('subaff3');
+let s4 = _URL.GetSearchParameter('gclid') || _URL.GetSearchParameter('subaff4');
 let s5 = "";
-let ranSiteID = GP(url, "ranSiteID");
+let ranSiteID = _URL.GetSearchParameter('ranSiteID');
 
 // TODO: find out if we still need this
 const fireClickPixels = () => console.warn('Need to implement fireClickPixels.')
 
-const CakeLink = (link, medium, ranSiteID, s1, s2, s3, s4, s5) => {
-	let cakeqs = "";
+var CakeLink = function(link, medium, ranSiteID, s1, s2, s3, s4, s5){
+	// &s1= is trailing on the link
+	const cakelink = new window.NaiveURL(link.href.replace('&s1=', ''));
+	const _s1 = (s1 === '' ? 'null' : 'f' + s1) + (medium !== '' ? '$' + medium : '');
+	const _s2 = (ranSiteID) ? ranSiteID : s2;
 
-	cakeqs += (s1 === "" ? "&s1=null" : "&s1=f" + s1) + (medium !== "" ? "$" + medium : "");
-	cakeqs += (s2 === "" ? "" : "&s2=" + (ranSiteID || s2));
-	cakeqs += (s3 === "" ? "" : "&s3=" + s3);
-	cakeqs += (s4 === "" ? "" : "&s4=" + s4);
-	cakeqs += (s5 === "" ? "" : "&s5=" + s5);
+	if(_s1) cakelink.SetSearchParameter('s1', _s1);
+	if(_s2) cakelink.SetSearchParameter('s2', _s2);
+	if(s3) cakelink.SetSearchParameter('s3', s3);
+	if(s4) cakelink.SetSearchParameter('s4', s4);
+	if(s5) cakelink.SetSearchParameter('s5', s5);
 
-	if(link.href.toLowerCase().indexOf(cakeqs) === -1){
+	link.href = cakelink.href;
+	link.target = '_blank';
+	if(!link.hasAttribute('data-position')){
 		ckcount += 1;
-		link.target = "_blank";
-		link.href = link.href.replace('&s1=', '');
-		link.href += cakeqs;
 		link.setAttribute('data-position', ckcount);
-
-
-		link.onclick = function (e) {
-			try {
-				fireClickPixels(this);
-			} catch (ex) {
-				console.log("Error in click event");
-				console.log(ex);
-			}
-		};
 	}
+	link.onclick = function (e) {
+		try {
+			fireClickPixels(this);
+		} catch (ex) {
+			console.log("Error in click event");
+			console.log(ex);
+		}
+	};
 
 	return link;
 }
 
-const TuneLink = (link, medium, ranSiteID, s1, s2, s3, s4, s5) => {
-	let tuneqs = "";
+var TuneLink = function(link, medium, ranSiteID, s1, s2, s3, s4, s5){
+	// &aff_sub= is trailing on the link
+	const tunelink = new window.NaiveURL(link.href.replace('&aff_sub=', ''));
+	const affsub = (s1 === '' ? 'null' : 'f' + s1) + (medium !== '' ? '$' + medium : '');
+	const affsub2 = (ranSiteID) ? ranSiteID : s2;
 
-	tuneqs += (s1 === "" ? "&aff_sub=null" : "&aff_sub=f" + s1) + (medium !== "" ? "$" + medium : "");
-	tuneqs += (s2 === "" ? "" : "&aff_sub2=" + (ranSiteID || s2));
-	tuneqs += (s3 === "" ? "" : "&aff_sub3=" + s3);
-	tuneqs += (s4 === "" ? "" : "&aff_sub4=" + s4);
-	tuneqs += (s5 === "" ? "" : "&aff_sub5=" + s5);
+	if(affsub) tunelink.SetSearchParameter('aff_sub', affsub);
+	if(affsub2) tunelink.SetSearchParameter('aff_sub2', affsub2);
+	if(s3) tunelink.SetSearchParameter('aff_sub3', s3);
+	if(s4) tunelink.SetSearchParameter('aff_sub4', s4);
+	if(s5) tunelink.SetSearchParameter('aff_sub5', s5);
 
-	if(link.href.toLowerCase().indexOf(tuneqs) === -1){
+	link.href = tunelink.href;
+	link.target = '_blank';
+	if(!link.hasAttribute('data-position')){
 		tunecount += 1;
-		link.target = "_blank";
-		link.href = link.href.replace('&aff_sub=', '');
-		link.href += tuneqs;
-		link.setAttribute('data-position', ckcount);
-
-
-		link.onclick = function (e) {
-			try {
-				fireClickPixels(this);
-			} catch (ex) {
-				console.log("Error in click event");
-				console.log(ex);
-			}
-		};
+		link.setAttribute('data-position', tunecount);
 	}
-
-	return link;
-}
-
-const LeadManagerLink = (link, s1, s2, s3, s4, s5) => {
-    let lmqs = "";
-
-	lmqs += GP(url, "affsecid", true);
-	lmqs += (s1 === "" ? "" : "&subaff1=" + s1);
-	lmqs += (s2 === "" ? "" : "&subaff2=" + s2);
-	lmqs += (s3 === "" ? "" : "&subaff3=" + s3);
-	lmqs += (s4 === "" ? "" : "&subaff4=" + s4);
-	lmqs += (s5 === "" ? "" : "&subaff5=" + s5);
-
-	if(link.href.toLowerCase().indexOf(lmqs)){
-		lmcount += 1;
-		link.target = "_blank";
-		link.href += lmqs;
-	}
-
-	return link;
-}
-
-const ThroughLink = (link, s1, s2, s4, medium) => {
-    let throughqs = "";
-
-	throughqs += (s1 === "" ? "" : "&utm_campaign=o" + (s1.toLowerCase().charAt(0) === "o" ? s1.split("o")[1] : s1));
-
-	throughqs += (s2 === "" ? "" : "&utm_source=o" + (s2.toLowerCase().charAt(0) === "o" ? s2.split("o")[1] : s2));
-
-	throughqs += (s4 === "" ? "" : "&gclid=o" + (s4.toLowerCase().charAt(0) === "o" ? s4.split("o")[1] : s4));
-
-	throughqs += (medium === "" ? "" : "&utm_medium=o" + (medium.toLowerCase().charAt(0) === "o" ? medium.split("o")[1] : medium));
-
-	if(link.href.toLowerCase().indexOf(throughqs) === -1){
-		if (link.href.indexOf('articleid') > -1){
-			link.href += "&utm_content=" + GP(link.href, "articleid");
-			link.href += throughqs;
+	link.onclick = function (e) {
+		try {
+			fireClickPixels(this);
+		} catch (ex) {
+			console.log("Error in click event");
+			console.log(ex);
 		}
-		else{
-			link.href += throughqs;
-		}
-	}
+	};
 
 	return link;
 }
+
+var LeadManagerLink = function(link, s1, s2, s3, s4, s5){
+	const lmlink = new window.NaiveURL(link);
+	const affsecid = window.NaiveURL.GetParameter('affsecid', window.location.href);
+
+	if(affsecid) lmlink.SetSearchParameter('affsecid', affsecid);
+	if(s1) lmlink.SetSearchParameter('s1', s1);
+	if(s2) lmlink.SetSearchParameter('s2', s2);
+	if(s3) lmlink.SetSearchParameter('s3', s3);
+	if(s4) lmlink.SetSearchParameter('s4', s4);
+	if(s5) lmlink.SetSearchParameter('s5', s5);
+
+	link.target = "_blank";
+	link.href = lmlink.href;
+	return link;
+}
+
+var ThroughLink = function(link, s1, s2, s4, medium){
+	const throughlink = new window.NaiveURL(link);
+
+	const prepend_O = (val) => (val.toLowerCase().charAt(0) === "o" ? val : 'o' + val);
+
+	if(s1) throughlink.SetSearchParameter('utm_campaign', prepend_O(s1));
+	if(s2) throughlink.SetSearchParameter('utm_source', prepend_O(s2));
+	if(s4) throughlink.SetSearchParameter('gclid', prepend_O(s4));
+	if(medium) throughlink.SetSearchParameter('utm_medium', prepend_O(medium));
+
+	// Set utm_content for internal article links
+	if (link.href.indexOf('articleid') > -1){
+		const articleid = window['articleid'] || (new window.NaiveURL(window.location.href)).GetSearchParameter('articleid');
+		throughlink.SetSearchParameter('utm_content', articleid);
+	}
+
+	link.href = throughlink.href;
+	return link;
+}
+
 
 const executeQueryStrings = () => {
     const links = document.getElementsByTagName('a');
-    let medium = (GP(url, "utm_medium") || GP(url, "subaff5"));
+	let medium = _URL.GetSearchParameter('utm_medium') || _URL.GetSearchParameter('subaff5');
 
     ckcount = 0;
-    lmcount = 0;
 	tunecount = 0;
 
     for (let i = 0; i < links.length; i++) {
