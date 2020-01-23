@@ -1,5 +1,3 @@
-// https://github.com/DevonWieczorek/NaiveURL
-
 (function (root, factory) {
     /* eslint-disable */
     if (typeof define === 'function' && define.amd) {
