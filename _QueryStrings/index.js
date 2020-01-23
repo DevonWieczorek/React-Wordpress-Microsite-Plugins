@@ -14,14 +14,16 @@ export class _QueryStrings extends Component {
 
     componentDidMount(){
         // Enqueue the script using it's public location
-        HookStore.doAction('enqueue_scripts', 'naiveURL', `${process.env.PUBLIC_URL}/scripts/naive-url.js`, '1.0', false);
-        HookStore.doAction('enqueue_scripts', 'executeQueryStrings', `${process.env.PUBLIC_URL}/scripts/execute-querystrings.js`, '1.1', true);
+        HookStore.doAction('enqueue_scripts', 'executeQueryStrings', `${process.env.PUBLIC_URL}/scripts/execute-querystrings.bundle.js`, '1.1', true);
 
         // Wait for everything to load before calling our function
         HookStore.addAction('window_loaded', 'QueryStrings', this.callExecuteQueryStrings);
 
         // Failsafe for feeds & siderail links
-        HookStore.addFilter( 'post_slug', 'QueryStrings', (slug) => (slug  + window.location.search), 10 );
+        HookStore.addFilter( 'post_slug', 'QueryStrings', (slug) => {
+            this.callExecuteQueryStrings();
+            return slug  + window.location.search;
+        }, 10 );
     }
 
     render(){
