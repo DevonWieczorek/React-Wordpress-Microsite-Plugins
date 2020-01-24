@@ -20,7 +20,7 @@ const CakeLink = function(link, medium, ranSiteID, s1, s2, s3, s4, s5){
 	// &s1= is trailing on the link
 	if(!cakelink.GetSearchParameter('s1')) cakelink.href = cakelink.href.replace('&s1=', '');
 
-	const _s1 = (s1 == '' ? 'null' : 'f' + s1) + (medium != '' ? '$' + medium : '');
+	const _s1 = (s1 === '' ? 'null' : 'f' + s1) + (medium !== '' ? '$' + medium : '');
 	const _s2 = (ranSiteID) ? ranSiteID : s2;
 
 	if(_s1) cakelink.SetSearchParameter('s1', _s1);
@@ -52,7 +52,7 @@ const TuneLink = function(link, medium, ranSiteID, s1, s2, s3, s4, s5){
 	// &aff_sub= is trailing on the link
 	if(!tunelink.GetSearchParameter('aff_sub')) tunelink.href = tunelink.href.replace('&aff_sub=', '');
 
-	const affsub = (s1 == '' ? 'null' : 'f' + s1) + (medium != '' ? '$' + medium : '');
+	const affsub = (s1 === '' ? 'null' : 'f' + s1) + (medium !== '' ? '$' + medium : '');
 	const affsub2 = (ranSiteID) ? ranSiteID : s2;
 
 	if(affsub) tunelink.SetSearchParameter('aff_sub', affsub);
@@ -97,7 +97,7 @@ const LeadManagerLink = function(link, s1, s2, s3, s4, s5){
 const ThroughLink = function(link, s1, s2, s4, medium){
 	const throughlink = new NaiveURL(link);
 
-	const prepend_o = (val) => (val.toLowerCase().charAt(0) == "o" ? val : 'o' + val);
+	const prepend_o = (val) => (val.toLowerCase().charAt(0) === "o" ? val : 'o' + val);
 
 	if(s1) throughlink.SetSearchParameter('utm_campaign', prepend_o(s1));
 	if(s2) throughlink.SetSearchParameter('utm_source', prepend_o(s2));
@@ -118,7 +118,7 @@ const executeQueryStrings = () => {
     const links = document.getElementsByTagName('a');
 	const medium = _URL.GetSearchParameter('utm_medium') || _URL.GetSearchParameter('subaff5');
 
-	// Reset count for accurate data-position 
+	// Reset count for accurate data-position
     ckcount = 0;
 	tunecount = 0;
 
