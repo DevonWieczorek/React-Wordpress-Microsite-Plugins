@@ -28,12 +28,12 @@ export class _InitTrackersEvent extends Component {
             }
         }
     	else if (this.isSnapchat()) {
-    		jQuery(document).on('touchstart mousemove', function(){
-    			if (this.init) {
+            document.addEventListener('touchstart mousemove', function(){
+                if (this.init) {
     				HookStore.doAction('initTrackers');
-    				jQuery(document).off('touchstart mousemove');
+    				document.removeEventListener('touchstart mousemove');
     			}
-    		});
+            });
         }
     }
 
