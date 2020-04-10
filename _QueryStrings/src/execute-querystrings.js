@@ -11,8 +11,10 @@ const s4 = _URL.GetSearchParameter('gclid') || _URL.GetSearchParameter('subaff4'
 const s5 = "";
 const ranSiteID = _URL.GetSearchParameter('ranSiteID');
 
-// TODO: find out if we still need this
-const fireClickPixels = () => console.warn('Need to implement fireClickPixels.');
+// Some sites use this, others don't
+if(!window.fireClickPixels){
+	window.fireClickPixels = () => console.warn('Need to implement fireClickPixels.');
+}
 
 const CakeLink = function(link, medium, ranSiteID, s1, s2, s3, s4, s5){
 	const cakelink = new NaiveURL(link.href);
