@@ -4,7 +4,7 @@ import HookStore from '@Core/HookStore';
 export class _InitTrackersEvent extends Component {
 
     // Allow other plugins to detect init
-    window['init'] = true;
+    init = true;
 
     isSnapchat = () => (navigator.userAgent.toLowerCase().indexOf('snapchat') > -1);
 
@@ -17,20 +17,20 @@ export class _InitTrackersEvent extends Component {
         else{
             window.dataLayer.push({'event': 'initTrackers'});
         }
-        // Prevent firing multiple times 
-        window['init'] = false;
+        // Prevent firing multiple times
+        this.init = false;
     }
 
     setEvent = () => {
         if (!this.isSnapchat()) {
-            if (window['init']) {
-                this.initTrackers();
+            if (this.init) {
+                HookStore.doAction('initTrackers');
             }
         }
     	else if (this.isSnapchat()) {
     		jQuery(document).on('touchstart mousemove', function(){
-    			if (window['init']) {
-    				this.initTrackers();
+    			if (this.init) {
+    				HookStore.doAction('initTrackers');
     				jQuery(document).off('touchstart mousemove');
     			}
     		});
@@ -38,6 +38,9 @@ export class _InitTrackersEvent extends Component {
     }
 
     componentDidMount(){
+        // Create an event so other plugins can listen for it
+        HookStore.addAction('initTrackers', 'InitTrackersEvent', this.initTrackers);
+
         this.setEvent();
     }
 
