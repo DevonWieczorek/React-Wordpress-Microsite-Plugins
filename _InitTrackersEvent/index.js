@@ -41,7 +41,8 @@ export class _InitTrackersEvent extends Component {
         // Create an event so other plugins can listen for it
         HookStore.addAction('initTrackers', 'InitTrackersEvent', this.initTrackers);
 
-        this.setEvent();
+        // Wait for everything to load before calling our function
+        HookStore.addAction('window_loaded', 'InitTrackersEvent', this.setEvent);
     }
 
     render(){
