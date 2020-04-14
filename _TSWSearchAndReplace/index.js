@@ -12,7 +12,7 @@ export class _TSWSearchAndReplace extends Component {
 
         // Update internal links
         let tswAnchorRegex = /(\S*?)href=(["'])(http:\/\/|https:\/\/)(thesmartwallet\.com)\1/gi;
-        content = content.replace(tswAnchorRegex, `href="${window.location.host}/posts`);
+        content = content.replace(tswAnchorRegex, `href="${window.location.protocol}//${window.location.host}/posts`);
 
         // Replace textual representations of thesmartwallet
         let host = process.env.REACT_APP_DEFAULT_SITENAME.replace(/ /g, '');
