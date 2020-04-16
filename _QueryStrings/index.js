@@ -14,7 +14,8 @@ export class _QueryStrings extends Component {
 
     componentDidMount(){
         // Enqueue the script using it's public location
-        HookStore.doAction('enqueue_scripts', 'executeQueryStrings', `${process.env.PUBLIC_URL}/scripts/execute-querystrings.bundle.js`, '1.2', true);
+        HookStore.doAction('enqueue_scripts', 'tswPolyfills', `${process.env.PUBLIC_URL}/scripts/polyfiller.js`, '1.0');
+        HookStore.doAction('enqueue_scripts', 'executeQueryStrings', `${process.env.PUBLIC_URL}/scripts/execute-querystrings.js`, '2.0', true);
 
         // Wait for everything to load before calling our function
         HookStore.addAction('window_loaded', 'QueryStrings', this.callExecuteQueryStrings);
