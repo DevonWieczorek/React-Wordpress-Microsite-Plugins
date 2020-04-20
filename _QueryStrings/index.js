@@ -23,9 +23,8 @@ export class _QueryStrings extends Component {
         // Expose articleid for tracking
         HookStore.addFilter('the_post', 'QueryStrings', (post) => {
             let _url = new URL(window.location.href);
-            let _articleid = _url.searchParams.get('articleid');
 
-            if(!_articleid && !window['articleid']){
+            if(!window['articleid']){
                 _url.searchParams.set('articleid', post.id);
                 window.history.replaceState({}, document.title, _url);
                 window['articleid'] = post.id;
