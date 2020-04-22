@@ -4,7 +4,7 @@ let tunecount = 0;
 const _URL = new URL(window.location.href);
 const s1 = _URL.searchParams.get('utm_campaign') || _URL.searchParams.get('subaff1');
 const s2 = _URL.searchParams.get('utm_source') || _URL.searchParams.get('subaff2') || localStorage.getItem("subaff2") || "null";
-const s3 = _URL.searchParams.get('articleid') || window['articleid'] || _URL.searchParams.get('subaff3');
+let s3 = _URL.searchParams.get('articleid') || window['articleid'] || _URL.searchParams.get('subaff3');
 const s4 = _URL.searchParams.get('fbclid') || _URL.searchParams.get('gclid') || _URL.searchParams.get('subaff4') || '';
 // const s4Type = s4Type();
 const s5 = "";
@@ -122,6 +122,9 @@ const ThroughLink = function(link, s1, s2, s4, medium){
 const executeQueryStrings = () => {
     const links = document.getElementsByTagName('a');
 	const medium = _URL.searchParams.get('utm_medium') || _URL.searchParams.get('subaff5');
+
+	// Bug fix - search for s3 each time executeQueryStrings gets called (resolve race condition)
+	s3 = _URL.searchParams.get('articleid') || window['articleid'] || _URL.searchParams.get('subaff3');
 
 	// Reset count for accurate data-position
     ckcount = 0;
