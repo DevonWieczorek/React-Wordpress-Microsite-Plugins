@@ -98,6 +98,12 @@ const LeadManagerLink = function(link, s1, s2, s3, s4, s5){
 }
 
 const ThroughLink = function(link, s1, s2, s4, medium){
+	// Don't add query params to mailto: links
+	if(link.href.indexOf('mailto:') > -1){
+		link.href = link.href.split('?')[0];
+		return link;
+	}
+
 	const throughlink = new URL(link.href);
 	const signup = new URL(window.location.href).searchParams.get('signup');
 
