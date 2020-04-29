@@ -3,23 +3,25 @@ import HookStore from '@Core/HookStore';
 
 export class _ReplaceContactWithMailto extends Component {
 
+    // eslint-disable-next-line no-useless-escape
+    regexEscape = s => s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+
+    // eslint-disable-next-line no-useless-escape
+    hrefRegExp = (href, flags = '') => new RegExp('href\\s*=\\s*"(.{0,}?)' + this.regexEscape(href) + '(.{0,}?)"', flags);
+
     // Replace contact-us with mailto: link
     replaceContact = (content) => {
 
         // TSW contact us link
-        const tswContactRegex = /(http:\/\/|https:\/\/)(thesmartwallet\.com\/contact-us)/gi;
-        const tswContactSearchRegex = new RegExp(`(http://|https://)(thesmartwallet.com/contact-us${window.location.search})`);
+        const tswContactRegex = this.hrefRegExp('thesmartwallet.com/contact-us', 'gi');
 
         // strip out www. and query strings from host
         const urlHost = window.location.host.replace('www.', '').split('?')[0];
-        const urlHostRegex = new RegExp(`${window.location.protocol}//${urlHost}/posts/contact-us`, 'gi');
-        const urlHostSearchRegex = new RegExp(`${window.location.protocol}//${urlHost}/posts/contact-us${window.location.search}`, 'gi');
+        const urlHostRegex = this.hrefRegExp(`${urlHost}/posts/contact-us`, 'gi');
 
         // Replace both tsw and this site, as to not be dependent on _TSWSearchAndReplace
-        const mailto = `mailto:info@${urlHost}`;
-        content = content.replace(tswContactSearchRegex, mailto);
+        const mailto = `href="mailto:info@${urlHost}"`;
         content = content.replace(tswContactRegex, mailto);
-        content = content.replace(urlHostSearchRegex, mailto);
         content = content.replace(urlHostRegex, mailto);
 
         return content;
