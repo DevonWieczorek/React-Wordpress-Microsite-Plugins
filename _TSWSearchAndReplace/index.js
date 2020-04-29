@@ -35,23 +35,11 @@ export class _TSWSearchAndReplace extends Component {
         return content;
     }
 
-    hideDate = () => {
-        let style = `
-            #post-${process.env.REACT_APP_DEFAULT_PRIVACY_POLICY_ID} .post-date,
-            #post-${process.env.REACT_APP_DEFAULT_TERMS_CONDITIONS_ID} .post-date{
-                display: none;
-            }
-        `;
-        return (
-            <style type="text/css">{style}</style>
-        )
-    }
-
     componentDidMount(){
         HookStore.addFilter( 'the_content', 'TSWSearchAndReplace', this.replaceContent, 1 );
     }
 
     render(){
-        return(this.hideDate());
+        return(null);
     }
 }
