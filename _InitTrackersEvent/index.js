@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import {Component} from 'react';
 import HookStore from '@Core/HookStore';
 
 export class _InitTrackersEvent extends Component {
