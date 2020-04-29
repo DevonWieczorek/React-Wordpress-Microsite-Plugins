@@ -4,8 +4,6 @@ import HookStore from '@Core/HookStore';
 export class _TSWSearchAndReplace extends Component {
 
     replaceContent = (content) => {
-        // TSW lazyloads images, we don't
-        content = content.replace(/data-src/g, 'src');
 
         // Clear any references to TSW
         content = content.replace(/the smart wallet/gi, process.env.REACT_APP_DEFAULT_SITENAME);
