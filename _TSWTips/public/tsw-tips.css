@@ -1,0 +1,12 @@
+.App header a:hover{
+    color: #fff !important;
+    text-decoration: underline;
+}
+
+#logo{
+    position: relative;
+    top: -3px;
+    left: -30px;
+    height: 37px;
+    padding-left: 0px;
+}
