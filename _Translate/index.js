@@ -18,7 +18,7 @@ export class _Translate extends Component {
         let url = new URL(endpoint);
         const ids = this.languageIDs;
         const lang = parseInt(localStorage.getItem('preferredLanguage')) || ids.en;
-        const ignore = Object.values(ids).filter(i => i !== lang);
+        let ignore = Object.values(ids).filter(i => i !== lang);
 
         let languages = Object.values(ids);
         languages.pop(languages.indexOf(lang));
@@ -27,7 +27,7 @@ export class _Translate extends Component {
         tags.push(lang);
 
         let tagsExclude = url.searchParams.get('tags_exclude').split(',');
-        if(tagsExclude) ignore.concat(tagsExclude);
+        if(tagsExclude) ignore = ignore.concat(tagsExclude);
 
         url.searchParams.set('tags', tags.join(','));
         url.searchParams.set('tags_exclude', ignore.join(','));
