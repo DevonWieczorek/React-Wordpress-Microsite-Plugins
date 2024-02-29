@@ -1,7 +1,7 @@
-This is the official repository that hosts all plugins for the [React Wordpress Microsite](https://github.com/FluentCo/React-Wordpress-Microsite) project.
+This is the official repository that hosts all plugins for the [React Wordpress Microsite](https://github.com/DevonWieczorek/React-Wordpress-Microsite) project.
 
 ## `React-WP CLI`
-The setup and theming of this project is bootstrapped by [React-WP CLI](https://github.com/FluentCo/React-WP-CLI) which is a proprietary CLI designed specifically for this project structure.
+The setup and theming of this project is bootstrapped by [React-WP CLI](https://github.com/DevonWieczorek/React-WP-CLI) which is a proprietary CLI designed specifically for this project structure.
 
 `React-WP CLI` is also used for plugin installation and management.
 
